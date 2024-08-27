@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLS Streaming Example</title>
+    <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/videojs-contrib-quality-levels@2.1.0/dist/videojs-contrib-quality-levels.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/videojs-hls-quality-selector@1.1.3/dist/videojs-hls-quality-selector.min.js"></script>
+</head>
+<body>
+
+<div>
+    <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360">
+        <source src="master.m3u8" type="application/x-mpegURL">
+    </video>
+</div>
+
+<script>
+    var player = videojs('my-video');
+
+    player.hlsQualitySelector({
+        displayCurrentQuality: true
+    });
+
+    player.ready(function() {
+        var qualityLevels = player.qualityLevels();
+        for (var i = 0; i < qualityLevels.length; i++) {
+            console.log('Quality Level: ' + qualityLevels[i].width + 'x' + qualityLevels[i].height);
+        }
+    });
+</script>
+
+</body>
+</html>
