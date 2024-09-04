@@ -8,10 +8,11 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class UserPrincipal implements UserDetails {
-    private Users users;
 
-    public UserPrincipal(Users users){
-        this.users = users;
+    private Users user;
+
+    public UserPrincipal(Users user) {
+        this.user = user;
     }
 
     @Override
@@ -21,12 +22,12 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return users.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return users.getUsername();
+        return user.getUsername();
     }
 
     @Override

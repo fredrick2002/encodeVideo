@@ -1,7 +1,7 @@
 package com.example.encodeVideo.service;
 
-import com.example.encodeVideo.model.Users;
 import com.example.encodeVideo.model.UserPrincipal;
+import com.example.encodeVideo.model.Users;
 import com.example.encodeVideo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,16 +11,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
+
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepo;
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users users = userRepository.findByUsername(username);
-
-        if(users == null){
-            System.out.println("User Not found");
-            throw new UsernameNotFoundException("not found");
+        Users user = userRepo.findByUsername(username);
+        if (user == null) {
+            System.out.println("User Not Found");
+            throw new UsernameNotFoundException("user not found");
         }
-        return new UserPrincipal(users);
+
+        return new UserPrincipal(user);
     }
 }
