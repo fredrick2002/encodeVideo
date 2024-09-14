@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 public class HomeController {
 
@@ -27,18 +29,35 @@ public class HomeController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Users user, HttpServletResponse response){
+    public void login(@RequestBody Users user, HttpServletResponse response){
         String verfiyUser = service.verify(user);
 
         if(verfiyUser != null){
             Cookie cookie = new Cookie("Bearer", verfiyUser);
             cookie.setMaxAge(3600);
             cookie.setPath("/");
-            cookie.setSecure(false);
+            cookie.setSecure(true);
             cookie.setHttpOnly(true);
             response.addCookie(cookie);
-            return "Cookie Set " + cookie;
+            // Set the response status to 200 OK
+            response.setStatus(HttpServletResponse.SC_OK);
+
+            // Write the response message
+            try {
+                response.getWriter().write("Login successful. Cookie Set.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // Set the response status to 401 Unauthorized
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+            // Write the response message
+            try {
+                response.getWriter().write("Invalid credentials");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return "fail";
     }
 }
