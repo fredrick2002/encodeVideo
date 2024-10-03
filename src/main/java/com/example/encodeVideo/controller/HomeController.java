@@ -29,35 +29,46 @@ public class HomeController {
     }
 
     @PostMapping("/login")
-    public void login(@RequestBody Users user, HttpServletResponse response){
-        String verfiyUser = service.verify(user);
+    public void login(@RequestBody Users user, HttpServletResponse response) {
+        String verifyUser = service.verify(user);
 
-        if(verfiyUser != null){
-            Cookie cookie = new Cookie("Bearer", verfiyUser);
-            cookie.setMaxAge(3600);
+        if (verifyUser != null) {
+            // Set the cookie with the JWT or token
+            Cookie cookie = new Cookie("Bearer", verifyUser);
+            cookie.setMaxAge(3600);  // Expires in 1 hour
             cookie.setPath("/");
-            cookie.setSecure(true);
-            cookie.setHttpOnly(true);
+            cookie.setSecure(false);// Only allow over HTTPS
+            cookie.setDomain("localhost");
+            cookie.setHttpOnly(true);  // Prevent access via JavaScript
             response.addCookie(cookie);
+
             // Set the response status to 200 OK
             response.setStatus(HttpServletResponse.SC_OK);
 
-            // Write the response message
+            // Write the response message as a JSON object
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
             try {
-                response.getWriter().write("Login successful. Cookie Set.");
+                response.getWriter().write("{\"message\": \"Login successful. Cookie Set.\"}");
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         } else {
             // Set the response status to 401 Unauthorized
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-            // Write the response message
+            // Write the response message as a JSON object
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
             try {
-                response.getWriter().write("Invalid credentials");
+                response.getWriter().write("{\"message\": \"Invalid credentials\"}");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
 }

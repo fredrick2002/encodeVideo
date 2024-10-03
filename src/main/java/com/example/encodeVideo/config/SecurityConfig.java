@@ -45,8 +45,8 @@ public class SecurityConfig {
                         }))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("login", "register")
-                        .permitAll()
+                        .requestMatchers("login", "register").permitAll()
+                        .requestMatchers("home").authenticated()
                         .anyRequest().authenticated())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

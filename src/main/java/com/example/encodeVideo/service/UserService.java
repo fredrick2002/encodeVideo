@@ -37,4 +37,8 @@ public class UserService{
 
         return "fail";
     }
+
+    public Users getUserByUsername(String username){
+        return repository.findByUsername(username);
+    }
 }
